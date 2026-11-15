@@ -1,0 +1,54 @@
+{
+ "input_rows": 12915149,
+ "runs": [
+  {
+   "cores": 1,
+   "shuffle_partitions": 16,
+   "silver_s": 43.7,
+   "gold_s": 2.9,
+   "process_s": 53.6,
+   "speedup_vs_first": 1.0
+  },
+  {
+   "cores": 2,
+   "shuffle_partitions": 16,
+   "silver_s": 44.9,
+   "gold_s": 4.1,
+   "process_s": 56.6,
+   "speedup_vs_first": 0.95
+  },
+  {
+   "cores": 4,
+   "shuffle_partitions": 16,
+   "silver_s": 47.1,
+   "gold_s": 4.8,
+   "process_s": 60.5,
+   "speedup_vs_first": 0.9
+  },
+  {
+   "cores": 8,
+   "shuffle_partitions": 16,
+   "silver_s": 52.7,
+   "gold_s": 4.4,
+   "process_s": 65.4,
+   "speedup_vs_first": 0.82
+  },
+  {
+   "cores": 8,
+   "shuffle_partitions": 4,
+   "silver_s": 46.9,
+   "gold_s": 3.7,
+   "process_s": 59.2,
+   "speedup_vs_first": 0.92
+  },
+  {
+   "cores": 8,
+   "shuffle_partitions": 200,
+   "silver_s": 52.8,
+   "gold_s": 5.4,
+   "process_s": 66.7,
+   "speedup_vs_first": 0.8
+  }
+ ],
+ "note": "one laptop (Apple M2, 8 cores, 8 GB); local mode; times include Delta writes"
+}

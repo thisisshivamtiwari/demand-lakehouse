@@ -1,12 +1,36 @@
 {
  "job": "demand-lakehouse",
- "started": "2026-11-15T22:46:01",
+ "started": "2026-11-15T23:01:09",
  "tasks": [
+  {
+   "task_key": "bronze",
+   "status": "ok",
+   "attempts": 1,
+   "seconds": 111.7
+  },
+  {
+   "task_key": "silver",
+   "status": "ok",
+   "attempts": 1,
+   "seconds": 106.4
+  },
+  {
+   "task_key": "gold",
+   "status": "ok",
+   "attempts": 1,
+   "seconds": 5.9
+  },
   {
    "task_key": "backtest",
    "status": "ok",
    "attempts": 1,
-   "seconds": 207.0
+   "seconds": 138.1
+  },
+  {
+   "task_key": "report",
+   "status": "ok",
+   "attempts": 1,
+   "seconds": 0.0
   }
  ],
  "status": "ok"

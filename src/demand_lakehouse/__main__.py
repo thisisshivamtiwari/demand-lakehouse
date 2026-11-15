@@ -1,4 +1,4 @@
-"""Command line: download | run [--only task ...] | ci | scaling | report | investigate."""
+"""Command line: download | run [--only task ...] | ci | scaling | report | investigate | select | demo."""
 
 import argparse
 import json
@@ -98,6 +98,7 @@ def main(argv=None) -> int:
     s = sub.add_parser("scaling")
     s.add_argument("--cores", nargs="*", type=int, default=[1, 2, 4, 8])
     sub.add_parser("report")
+    sub.add_parser("demo", help="paced walk-through of the recorded results, for the demo video")
     sub.add_parser("select", help="choose the GBT target variant on the validation window")
     sub.add_parser("investigate", help="negative fares in Oct-Nov 2025: reversals vs flex-fare rows")
     a = p.parse_args(argv)
@@ -110,6 +111,11 @@ def main(argv=None) -> int:
         from . import report
 
         report.write(C.RESULTS, C.ROOT / "README.md")
+        return 0
+    if a.cmd == "demo":
+        from . import demo
+
+        demo.run()
         return 0
     if a.cmd == "select":
         from pyspark.sql import functions as F
