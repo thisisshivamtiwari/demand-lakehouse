@@ -1,0 +1,14 @@
+# The pipeline as a task graph. Field names follow a Databricks job definition (task_key, depends_on, max_retries),
+# so the same graph maps onto a Databricks workflow with one notebook or wheel task per key.
+name: demand-lakehouse
+tasks:
+  - task_key: bronze
+    max_retries: 1
+  - task_key: silver
+    depends_on: [{task_key: bronze}]
+  - task_key: gold
+    depends_on: [{task_key: silver}]
+  - task_key: backtest
+    depends_on: [{task_key: gold}]
+  - task_key: report
+    depends_on: [{task_key: backtest}]
