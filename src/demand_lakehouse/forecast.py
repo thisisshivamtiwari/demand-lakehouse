@@ -80,13 +80,28 @@ def _log(df: DataFrame) -> DataFrame:
 LOG_FEATURES = ["dow", "h", "holiday", "l_sw1", "l_sw2", "l_sw3", "l_sw4", "l_last", "l_m7", "l_m28"]
 
 
-def gbt_forecast(train: DataFrame, test: DataFrame) -> DataFrame:
-    assembler = VectorAssembler(inputCols=LOG_FEATURES, outputCol="features")
+REL_FEATURES = ["dow", "h", "holiday", "l_m28", "r_sw1", "r_sw2", "r_sw3", "r_sw4", "r_last", "r_m7"]
+# "relative" won on the validation window (results/model_selection.json); see select_gbt
+GBT_TARGET = "relative"
+
+
+def _relative(df: DataFrame) -> DataFrame:
+    """Everything as log-ratios to the 28-day level, so one tree model fits a 3-trip zone and the whole city."""
+    for c in ["sw1", "sw2", "sw3", "sw4", "last", "m7"]:
+        df = df.withColumn(f"r_{c}", F.col(f"l_{c}") - F.col("l_m28"))
+    return df.withColumn("label", F.col("label") - F.col("l_m28"))
+
+
+def gbt_forecast(train: DataFrame, test: DataFrame, target: str = GBT_TARGET) -> DataFrame:
+    """target "log_level": predict log1p(y); "relative": predict log1p(y) - log1p(28-day mean) and add the level back."""
+    prep, cols = (_log, LOG_FEATURES) if target == "log_level" else (lambda d: _relative(_log(d)), REL_FEATURES)
+    assembler = VectorAssembler(inputCols=cols, outputCol="features")
     # fixed hash partitioning and order, so the sampled split candidates are the same on any machine
-    tr = assembler.transform(_log(train)).repartition(8, "series", "date", "h").sortWithinPartitions("series", "date", "h")
+    tr = assembler.transform(prep(train)).repartition(8, "series", "date", "h").sortWithinPartitions("series", "date", "h")
     model = GBTRegressor(featuresCol="features", labelCol="label", **GBT_PARAMS).fit(tr)
-    pred = model.transform(assembler.transform(_log(test)))
-    return pred.select("series", "origin", "date", "h", F.greatest(F.expm1("prediction"), F.lit(0.0)).alias("yhat"))
+    pred = model.transform(assembler.transform(prep(test)))
+    log_y = F.col("prediction") + (F.col("l_m28") if target == "relative" else F.lit(0.0))
+    return pred.select("series", "origin", "date", "h", F.greatest(F.expm1(log_y), F.lit(0.0)).alias("yhat"))
 
 
 RIDGE_COLS = ["l_sw1", "l_sw2", "l_sw3", "l_sw4", "l_last", "l_m7", "l_m28", "holiday"]
@@ -124,10 +139,10 @@ def ridge_forecast(train: DataFrame, test: DataFrame) -> DataFrame:
     return both.groupBy("series").applyInPandas(_ridge, schema)
 
 
-def forecasts(ys: DataFrame, test_origins: list[dt.date]) -> DataFrame:
+def forecasts(ys: DataFrame, test_origins: list[dt.date], gbt: dict[str, str] | None = None) -> DataFrame:
     """Every method's forecasts for the backtest origins at one level, with actuals.
 
-    Columns: series, origin, date, h, y, method, yhat."""
+    Columns: series, origin, date, h, y, method, yhat. `gbt` maps method name -> GBT target variant."""
     feats = features(ys).cache()
     first = min(test_origins)
     train = feats.where(F.col("date") <= F.lit(first))  # labels known at the first backtest origin
@@ -138,8 +153,11 @@ def forecasts(ys: DataFrame, test_origins: list[dt.date]) -> DataFrame:
     preds = [
         test.select(*keys, F.lit("seasonal_naive").alias("method"), F.col("sw1").alias("yhat")),
         test.select(*keys, F.lit("seasonal_mean4").alias("method"), mean4.alias("yhat")),
-        gbt_forecast(train, test).withColumn("method", F.lit("gbt_global")),
         ridge_forecast(train, test).withColumn("method", F.lit("ridge_per_series")),
+    ]
+    preds += [
+        gbt_forecast(train, test, target).withColumn("method", F.lit(name))
+        for name, target in (gbt or {"gbt_global": GBT_TARGET}).items()
     ]
     out = preds[0]
     for p in preds[1:]:
@@ -185,6 +203,22 @@ def by_horizon(fc: DataFrame) -> dict:
     return out
 
 
+def select_gbt(spark: SparkSession, gold: DataFrame) -> dict:
+    """Choose the GBT target on a validation window that ends where the test window starts (so the test stays unseen)."""
+    last_day = gold.agg(F.max("date")).first()[0]
+    val_end = origins(last_day)[0]  # the validation actuals stop at the first test origin
+    val_origins = origins(val_end)
+    variants = {f"gbt_{t}": t for t in ["log_level", "relative"]}
+    out = {"validation_origins": [str(o) for o in val_origins], "levels": {}}
+    for level, ys in series_frames(gold).items():
+        fc = forecasts(ys, val_origins, gbt=variants)
+        out["levels"][level] = metrics(fc, scale(ys, val_origins[0]))
+    zone = out["levels"]["zone"]
+    out["chosen"] = min(variants, key=lambda m: zone[m]["wape"]).removeprefix("gbt_")
+    out["rule"] = "lowest zone-level WAPE on the validation window"
+    return out
+
+
 def backtest(spark: SparkSession, gold: DataFrame) -> dict:
     levels = series_frames(gold)
     last_day = gold.agg(F.max("date")).first()[0]
@@ -197,6 +231,7 @@ def backtest(spark: SparkSession, gold: DataFrame) -> dict:
             "origins": [str(o) for o in test_origins],
             "horizon_days": HORIZON,
             "gbt": GBT_PARAMS,
+            "gbt_target": GBT_TARGET,
             "features": FEATURES,
         },
         "levels": {},

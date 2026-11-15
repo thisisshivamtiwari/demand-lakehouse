@@ -1,0 +1,131 @@
+{
+ "validation_origins": [
+  "2026-04-01",
+  "2026-04-08",
+  "2026-04-15",
+  "2026-04-22",
+  "2026-04-29",
+  "2026-05-06",
+  "2026-05-13",
+  "2026-05-20",
+  "2026-05-27",
+  "2026-06-03",
+  "2026-06-10",
+  "2026-06-17"
+ ],
+ "levels": {
+  "zone": {
+   "gbt_relative": {
+    "wape": 0.114,
+    "bias": -0.0242,
+    "mase": 0.8305,
+    "series": 263,
+    "rows": 44184
+   },
+   "seasonal_mean4": {
+    "wape": 0.109,
+    "bias": -0.005,
+    "mase": 0.8663,
+    "series": 263,
+    "rows": 44184
+   },
+   "seasonal_naive": {
+    "wape": 0.1322,
+    "bias": -0.0016,
+    "mase": 0.912,
+    "series": 263,
+    "rows": 44184
+   },
+   "ridge_per_series": {
+    "wape": 0.1133,
+    "bias": -0.0226,
+    "mase": 0.9691,
+    "series": 263,
+    "rows": 44184
+   },
+   "gbt_log_level": {
+    "wape": 0.1458,
+    "bias": -0.0333,
+    "mase": 0.882,
+    "series": 263,
+    "rows": 44184
+   }
+  },
+  "borough": {
+   "gbt_relative": {
+    "wape": 0.0937,
+    "bias": -0.0021,
+    "mase": 0.7701,
+    "series": 6,
+    "rows": 1008
+   },
+   "seasonal_mean4": {
+    "wape": 0.0819,
+    "bias": -0.005,
+    "mase": 0.6792,
+    "series": 6,
+    "rows": 1008
+   },
+   "seasonal_naive": {
+    "wape": 0.1049,
+    "bias": -0.0016,
+    "mase": 0.6853,
+    "series": 6,
+    "rows": 1008
+   },
+   "ridge_per_series": {
+    "wape": 0.0786,
+    "bias": -0.0151,
+    "mase": 0.8623,
+    "series": 6,
+    "rows": 1008
+   },
+   "gbt_log_level": {
+    "wape": 0.0922,
+    "bias": -0.0171,
+    "mase": 0.8342,
+    "series": 6,
+    "rows": 1008
+   }
+  },
+  "city": {
+   "gbt_relative": {
+    "wape": 0.0994,
+    "bias": -0.036,
+    "mase": 0.8379,
+    "series": 1,
+    "rows": 168
+   },
+   "seasonal_mean4": {
+    "wape": 0.0748,
+    "bias": -0.005,
+    "mase": 0.6307,
+    "series": 1,
+    "rows": 168
+   },
+   "seasonal_naive": {
+    "wape": 0.0974,
+    "bias": -0.0016,
+    "mase": 0.8211,
+    "series": 1,
+    "rows": 168
+   },
+   "ridge_per_series": {
+    "wape": 0.0651,
+    "bias": -0.0166,
+    "mase": 0.5491,
+    "series": 1,
+    "rows": 168
+   },
+   "gbt_log_level": {
+    "wape": 0.1019,
+    "bias": -0.0471,
+    "mase": 0.8595,
+    "series": 1,
+    "rows": 168
+   }
+  }
+ },
+ "chosen": "relative",
+ "rule": "lowest zone-level WAPE on the validation window"
+}

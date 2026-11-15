@@ -60,7 +60,8 @@ def actions(spark) -> dict:
 
 
 def ci() -> int:
-    """Replay the backtest from the committed gold snapshot; it must reproduce results/backtest.json and beat the baseline."""
+    """Replay the backtest from the committed gold snapshot: it must reproduce results/backtest.json, and the model must
+    beat seasonal-naive on zone-level MASE (the WAPE margin is too small to gate on; see the README)."""
     from . import forecast
     from .spark import get_spark
 
@@ -77,8 +78,8 @@ def ci() -> int:
                     if a is None or b is None or abs(a - b) > 2e-3:
                         problems.append(f"{section}.{level}.{method}.{k}: got {a}, recorded {b}")
     z = got["levels"]["zone"]
-    if not z["gbt_global"]["wape"] < z["seasonal_naive"]["wape"]:
-        problems.append("gbt_global does not beat seasonal_naive at zone level")
+    if not z["gbt_global"]["mase"] < z["seasonal_naive"]["mase"]:
+        problems.append("gbt_global no longer beats seasonal_naive on zone-level MASE")
     print(json.dumps(got["levels"]["zone"], indent=1))
     for p in problems:
         print("FAIL", p)
@@ -97,6 +98,7 @@ def main(argv=None) -> int:
     s = sub.add_parser("scaling")
     s.add_argument("--cores", nargs="*", type=int, default=[1, 2, 4, 8])
     sub.add_parser("report")
+    sub.add_parser("select", help="choose the GBT target variant on the validation window")
     sub.add_parser("investigate", help="negative fares in Oct-Nov 2025: reversals vs flex-fare rows")
     a = p.parse_args(argv)
     if a.cmd == "download":
@@ -108,6 +110,18 @@ def main(argv=None) -> int:
         from . import report
 
         report.write(C.RESULTS, C.ROOT / "README.md")
+        return 0
+    if a.cmd == "select":
+        from pyspark.sql import functions as F
+
+        from . import forecast
+        from .spark import get_spark
+
+        spark = get_spark()
+        gold = spark.read.format("delta").load(str(C.GOLD)).withColumn("date", F.col("date").cast("date"))
+        out = forecast.select_gbt(spark, gold)
+        save("model_selection", out)
+        print(json.dumps(out["levels"]["zone"], indent=1), "chosen:", out["chosen"])
         return 0
     if a.cmd == "investigate":
         from .investigate import negative_fares

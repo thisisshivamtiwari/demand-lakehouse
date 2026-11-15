@@ -1,0 +1,251 @@
+{
+ "config": {
+  "first_day": "2025-10-01",
+  "last_day": "2026-09-30",
+  "origins": [
+   "2026-07-01",
+   "2026-07-08",
+   "2026-07-15",
+   "2026-07-22",
+   "2026-07-29",
+   "2026-08-05",
+   "2026-08-12",
+   "2026-08-19",
+   "2026-08-26",
+   "2026-09-02",
+   "2026-09-09",
+   "2026-09-16"
+  ],
+  "horizon_days": 14,
+  "gbt": {
+   "maxIter": 60,
+   "maxDepth": 5,
+   "stepSize": 0.1,
+   "seed": 7
+  },
+  "gbt_target": "relative",
+  "features": [
+   "dow",
+   "h",
+   "holiday",
+   "sw1",
+   "sw2",
+   "sw3",
+   "sw4",
+   "last",
+   "m7",
+   "m28"
+  ]
+ },
+ "levels": {
+  "zone": {
+   "seasonal_mean4": {
+    "wape": 0.1467,
+    "bias": -0.0222,
+    "mase": 0.8178,
+    "series": 263,
+    "rows": 44184
+   },
+   "gbt_global": {
+    "wape": 0.144,
+    "bias": -0.0362,
+    "mase": 0.8106,
+    "series": 263,
+    "rows": 44184
+   },
+   "seasonal_naive": {
+    "wape": 0.1459,
+    "bias": -0.0262,
+    "mase": 0.9107,
+    "series": 263,
+    "rows": 44184
+   },
+   "ridge_per_series": {
+    "wape": 0.1497,
+    "bias": 0.0331,
+    "mase": 0.8434,
+    "series": 263,
+    "rows": 44184
+   }
+  },
+  "borough": {
+   "seasonal_mean4": {
+    "wape": 0.1233,
+    "bias": -0.0222,
+    "mase": 0.7285,
+    "series": 6,
+    "rows": 1008
+   },
+   "gbt_global": {
+    "wape": 0.1373,
+    "bias": -0.0243,
+    "mase": 0.8658,
+    "series": 6,
+    "rows": 1008
+   },
+   "seasonal_naive": {
+    "wape": 0.1188,
+    "bias": -0.0262,
+    "mase": 0.7862,
+    "series": 6,
+    "rows": 1008
+   },
+   "ridge_per_series": {
+    "wape": 0.113,
+    "bias": 0.0349,
+    "mase": 0.7521,
+    "series": 6,
+    "rows": 1008
+   }
+  },
+  "city": {
+   "seasonal_mean4": {
+    "wape": 0.1143,
+    "bias": -0.0222,
+    "mase": 0.9464,
+    "series": 1,
+    "rows": 168
+   },
+   "gbt_global": {
+    "wape": 0.1451,
+    "bias": 0.0407,
+    "mase": 1.201,
+    "series": 1,
+    "rows": 168
+   },
+   "seasonal_naive": {
+    "wape": 0.1094,
+    "bias": -0.0262,
+    "mase": 0.9055,
+    "series": 1,
+    "rows": 168
+   },
+   "ridge_per_series": {
+    "wape": 0.1072,
+    "bias": 0.0442,
+    "mase": 0.8874,
+    "series": 1,
+    "rows": 168
+   }
+  }
+ },
+ "by_horizon": {
+  "zone": {
+   "seasonal_naive": {
+    "h1_7": 0.139,
+    "h8_14": 0.1526
+   },
+   "seasonal_mean4": {
+    "h8_14": 0.1465,
+    "h1_7": 0.1468
+   },
+   "gbt_global": {
+    "h8_14": 0.1514,
+    "h1_7": 0.1364
+   },
+   "ridge_per_series": {
+    "h1_7": 0.1523,
+    "h8_14": 0.1471
+   }
+  },
+  "borough": {
+   "seasonal_naive": {
+    "h1_7": 0.1123,
+    "h8_14": 0.1252
+   },
+   "seasonal_mean4": {
+    "h8_14": 0.1231,
+    "h1_7": 0.1235
+   },
+   "ridge_per_series": {
+    "h1_7": 0.1148,
+    "h8_14": 0.1112
+   },
+   "gbt_global": {
+    "h8_14": 0.1456,
+    "h1_7": 0.1287
+   }
+  },
+  "city": {
+   "seasonal_naive": {
+    "h1_7": 0.1019,
+    "h8_14": 0.1167
+   },
+   "seasonal_mean4": {
+    "h1_7": 0.1157,
+    "h8_14": 0.113
+   },
+   "ridge_per_series": {
+    "h1_7": 0.1092,
+    "h8_14": 0.1052
+   },
+   "gbt_global": {
+    "h1_7": 0.1406,
+    "h8_14": 0.1494
+   }
+  }
+ },
+ "bottom_up": {
+  "borough": {
+   "seasonal_mean4": {
+    "wape": 0.1233,
+    "bias": -0.0222,
+    "mase": 0.7285,
+    "series": 6,
+    "rows": 1008
+   },
+   "gbt_global": {
+    "wape": 0.1189,
+    "bias": -0.0362,
+    "mase": 0.7472,
+    "series": 6,
+    "rows": 1008
+   },
+   "seasonal_naive": {
+    "wape": 0.1188,
+    "bias": -0.0262,
+    "mase": 0.7862,
+    "series": 6,
+    "rows": 1008
+   },
+   "ridge_per_series": {
+    "wape": 0.1162,
+    "bias": 0.0331,
+    "mase": 0.7722,
+    "series": 6,
+    "rows": 1008
+   }
+  },
+  "city": {
+   "seasonal_mean4": {
+    "wape": 0.1143,
+    "bias": -0.0222,
+    "mase": 0.9464,
+    "series": 1,
+    "rows": 168
+   },
+   "gbt_global": {
+    "wape": 0.1102,
+    "bias": -0.0362,
+    "mase": 0.912,
+    "series": 1,
+    "rows": 168
+   },
+   "seasonal_naive": {
+    "wape": 0.1094,
+    "bias": -0.0262,
+    "mase": 0.9055,
+    "series": 1,
+    "rows": 168
+   },
+   "ridge_per_series": {
+    "wape": 0.1037,
+    "bias": 0.0331,
+    "mase": 0.8585,
+    "series": 1,
+    "rows": 168
+   }
+  }
+ },
+ "seconds": 207.0
+}

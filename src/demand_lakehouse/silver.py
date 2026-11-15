@@ -72,9 +72,13 @@ def check(df: DataFrame, rules: dict) -> dict:
     return out
 
 
-def run(spark: SparkSession, bronze: Path, silver: Path, quarantine: Path, rules: dict | None = None) -> dict:
+def run(
+    spark: SparkSession, bronze: Path, silver: Path, quarantine: Path, rules: dict | None = None, months: list[str] | None = None
+) -> dict:
     rules = rules or default_rules()
     df = spark.read.format("delta").load(str(bronze))
+    if months:
+        df = df.where(F.col("src_month").isin(months))
     report = check(df, rules)
     if report["breaches"]:
         raise ExpectationFailed(f"data-quality thresholds broken: {report['breaches']}", report)

@@ -88,7 +88,7 @@ def scaling_table(sc: dict) -> str:
     lines = ["| Cores | Shuffle partitions | Silver (s) | Gold (s) | Speed-up vs 1 core |", "|---|---|---|---|---|"]
     for r in sc["runs"]:
         lines.append(f"| {r['cores']} | {r['shuffle_partitions']} | {r['silver_s']} | {r['gold_s']} | {r['speedup_vs_first']}x |")
-    return "\n".join(lines) + f"\n\nInput: {sc['input_rows']:,} bronze rows. {sc['note']}."
+    return "\n".join(lines) + f"\n\nInput: {sc['input_rows']:,} bronze rows (the first 3 months). {sc['note']}."
 
 
 def render(results: Path) -> str:

@@ -1,4 +1,4 @@
-"""Wall time of the silver and gold stages (45M+ rows in) by core count and shuffle partitions.
+"""Wall time of the silver and gold stages on 3 months of bronze (13M rows) by core count and shuffle partitions.
 
 Each configuration runs in its own process, because a Spark session's master is fixed once it starts.
 Output goes to a scratch area of the lake so the real silver and gold tables are untouched.
@@ -19,7 +19,7 @@ cores, parts = int(sys.argv[1]), int(sys.argv[2])
 spark = get_spark(f"local[{cores}]", partitions=parts)
 tmp = C.LAKE / "scaling"
 t0 = time.perf_counter()
-silver.run(spark, C.BRONZE, tmp / "silver", tmp / "quarantine")
+silver.run(spark, C.BRONZE, tmp / "silver", tmp / "quarantine", months=C.MONTHS[:3])
 t1 = time.perf_counter()
 gold.run(spark, tmp / "silver", C.RAW / "taxi_zone_lookup.csv", tmp / "gold")
 t2 = time.perf_counter()
@@ -40,7 +40,8 @@ def run(cores: list[int]) -> dict:
     base = runs[0]["silver_s"] + runs[0]["gold_s"]
     for r in runs:
         r["speedup_vs_first"] = round(base / (r["silver_s"] + r["gold_s"]), 2)
-    rows = sum(json.loads((C.RESULTS / "bronze.json").read_text())["rows_by_month"].values())
+    by_month = json.loads((C.RESULTS / "bronze.json").read_text())["rows_by_month"]
+    rows = sum(by_month[m] for m in C.MONTHS[:3])
     return {
         "input_rows": rows,
         "runs": runs,
