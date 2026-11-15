@@ -1,0 +1,58 @@
+{
+ "rows": 46494548,
+ "rules": {
+  "pickup_in_file_month": {
+   "failed": 214,
+   "rate": 5e-06,
+   "worst_month": "2026-07",
+   "worst_month_rate": 1.3e-05,
+   "max_rate": 0.005
+  },
+  "dropoff_after_pickup": {
+   "failed": 607994,
+   "rate": 0.013077,
+   "worst_month": "2025-10",
+   "worst_month_rate": 0.015347,
+   "max_rate": 0.02
+  },
+  "duration_1min_to_4h": {
+   "failed": 1110475,
+   "rate": 0.023884,
+   "worst_month": "2025-10",
+   "worst_month_rate": 0.027112,
+   "max_rate": 0.05
+  },
+  "distance_0_to_100mi": {
+   "failed": 1489061,
+   "rate": 0.032027,
+   "worst_month": "2026-09",
+   "worst_month_rate": 0.037998,
+   "max_rate": 0.05
+  },
+  "not_a_reversal": {
+   "failed": 342289,
+   "rate": 0.007362,
+   "worst_month": "2025-10",
+   "worst_month_rate": 0.015454,
+   "max_rate": 0.05
+  },
+  "flex_fare_amount_non_negative": {
+   "failed": 600571,
+   "rate": 0.012917,
+   "worst_month": "2025-11",
+   "worst_month_rate": 0.082981,
+   "max_rate": null
+  },
+  "known_pickup_zone": {
+   "failed": 79147,
+   "rate": 0.001702,
+   "worst_month": "2026-08",
+   "worst_month_rate": 0.002154,
+   "max_rate": 0.05
+  }
+ },
+ "breaches": [],
+ "silver_rows": 43896078,
+ "quarantined_rows": 2598470,
+ "seconds": 132.5
+}

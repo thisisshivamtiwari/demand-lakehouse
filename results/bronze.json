@@ -1,0 +1,407 @@
+{
+ "months": [
+  {
+   "month": "2025-10",
+   "file": "yellow_tripdata_2025-10.parquet",
+   "drift": [
+    {
+     "file": "yellow_tripdata_2025-10.parquet",
+     "column": "passenger_count",
+     "change": "cast",
+     "from": "bigint",
+     "to": "int"
+    },
+    {
+     "file": "yellow_tripdata_2025-10.parquet",
+     "column": "payment_type",
+     "change": "cast",
+     "from": "bigint",
+     "to": "int"
+    }
+   ],
+   "unused_columns": [
+    "Airport_fee",
+    "RatecodeID",
+    "cbd_congestion_fee",
+    "congestion_surcharge",
+    "extra",
+    "improvement_surcharge",
+    "mta_tax",
+    "store_and_fwd_flag",
+    "tip_amount",
+    "tolls_amount"
+   ]
+  },
+  {
+   "month": "2025-11",
+   "file": "yellow_tripdata_2025-11.parquet",
+   "drift": [
+    {
+     "file": "yellow_tripdata_2025-11.parquet",
+     "column": "passenger_count",
+     "change": "cast",
+     "from": "bigint",
+     "to": "int"
+    },
+    {
+     "file": "yellow_tripdata_2025-11.parquet",
+     "column": "payment_type",
+     "change": "cast",
+     "from": "bigint",
+     "to": "int"
+    }
+   ],
+   "unused_columns": [
+    "Airport_fee",
+    "RatecodeID",
+    "cbd_congestion_fee",
+    "congestion_surcharge",
+    "extra",
+    "improvement_surcharge",
+    "mta_tax",
+    "store_and_fwd_flag",
+    "tip_amount",
+    "tolls_amount"
+   ]
+  },
+  {
+   "month": "2025-12",
+   "file": "yellow_tripdata_2025-12.parquet",
+   "drift": [
+    {
+     "file": "yellow_tripdata_2025-12.parquet",
+     "column": "passenger_count",
+     "change": "cast",
+     "from": "bigint",
+     "to": "int"
+    },
+    {
+     "file": "yellow_tripdata_2025-12.parquet",
+     "column": "payment_type",
+     "change": "cast",
+     "from": "bigint",
+     "to": "int"
+    }
+   ],
+   "unused_columns": [
+    "Airport_fee",
+    "RatecodeID",
+    "cbd_congestion_fee",
+    "congestion_surcharge",
+    "extra",
+    "improvement_surcharge",
+    "mta_tax",
+    "store_and_fwd_flag",
+    "tip_amount",
+    "tolls_amount"
+   ]
+  },
+  {
+   "month": "2026-01",
+   "file": "yellow_tripdata_2026-01.parquet",
+   "drift": [
+    {
+     "file": "yellow_tripdata_2026-01.parquet",
+     "column": "passenger_count",
+     "change": "cast",
+     "from": "bigint",
+     "to": "int"
+    },
+    {
+     "file": "yellow_tripdata_2026-01.parquet",
+     "column": "payment_type",
+     "change": "cast",
+     "from": "bigint",
+     "to": "int"
+    }
+   ],
+   "unused_columns": [
+    "Airport_fee",
+    "RatecodeID",
+    "cbd_congestion_fee",
+    "congestion_surcharge",
+    "extra",
+    "improvement_surcharge",
+    "mta_tax",
+    "store_and_fwd_flag",
+    "tip_amount",
+    "tolls_amount"
+   ]
+  },
+  {
+   "month": "2026-02",
+   "file": "yellow_tripdata_2026-02.parquet",
+   "drift": [
+    {
+     "file": "yellow_tripdata_2026-02.parquet",
+     "column": "passenger_count",
+     "change": "cast",
+     "from": "bigint",
+     "to": "int"
+    },
+    {
+     "file": "yellow_tripdata_2026-02.parquet",
+     "column": "payment_type",
+     "change": "cast",
+     "from": "bigint",
+     "to": "int"
+    }
+   ],
+   "unused_columns": [
+    "Airport_fee",
+    "RatecodeID",
+    "cbd_congestion_fee",
+    "congestion_surcharge",
+    "extra",
+    "improvement_surcharge",
+    "mta_tax",
+    "store_and_fwd_flag",
+    "tip_amount",
+    "tolls_amount"
+   ]
+  },
+  {
+   "month": "2026-03",
+   "file": "yellow_tripdata_2026-03.parquet",
+   "drift": [
+    {
+     "file": "yellow_tripdata_2026-03.parquet",
+     "column": "passenger_count",
+     "change": "cast",
+     "from": "bigint",
+     "to": "int"
+    },
+    {
+     "file": "yellow_tripdata_2026-03.parquet",
+     "column": "payment_type",
+     "change": "cast",
+     "from": "bigint",
+     "to": "int"
+    }
+   ],
+   "unused_columns": [
+    "Airport_fee",
+    "RatecodeID",
+    "cbd_congestion_fee",
+    "congestion_surcharge",
+    "extra",
+    "improvement_surcharge",
+    "mta_tax",
+    "store_and_fwd_flag",
+    "tip_amount",
+    "tolls_amount"
+   ]
+  },
+  {
+   "month": "2026-04",
+   "file": "yellow_tripdata_2026-04.parquet",
+   "drift": [
+    {
+     "file": "yellow_tripdata_2026-04.parquet",
+     "column": "passenger_count",
+     "change": "cast",
+     "from": "bigint",
+     "to": "int"
+    },
+    {
+     "file": "yellow_tripdata_2026-04.parquet",
+     "column": "payment_type",
+     "change": "cast",
+     "from": "bigint",
+     "to": "int"
+    }
+   ],
+   "unused_columns": [
+    "Airport_fee",
+    "RatecodeID",
+    "cbd_congestion_fee",
+    "congestion_surcharge",
+    "extra",
+    "improvement_surcharge",
+    "mta_tax",
+    "store_and_fwd_flag",
+    "tip_amount",
+    "tolls_amount"
+   ]
+  },
+  {
+   "month": "2026-05",
+   "file": "yellow_tripdata_2026-05.parquet",
+   "drift": [
+    {
+     "file": "yellow_tripdata_2026-05.parquet",
+     "column": "passenger_count",
+     "change": "cast",
+     "from": "bigint",
+     "to": "int"
+    },
+    {
+     "file": "yellow_tripdata_2026-05.parquet",
+     "column": "payment_type",
+     "change": "cast",
+     "from": "bigint",
+     "to": "int"
+    }
+   ],
+   "unused_columns": [
+    "Airport_fee",
+    "RatecodeID",
+    "cbd_congestion_fee",
+    "congestion_surcharge",
+    "extra",
+    "improvement_surcharge",
+    "mta_tax",
+    "store_and_fwd_flag",
+    "tip_amount",
+    "tolls_amount"
+   ]
+  },
+  {
+   "month": "2026-06",
+   "file": "yellow_tripdata_2026-06.parquet",
+   "drift": [
+    {
+     "file": "yellow_tripdata_2026-06.parquet",
+     "column": "passenger_count",
+     "change": "cast",
+     "from": "bigint",
+     "to": "int"
+    },
+    {
+     "file": "yellow_tripdata_2026-06.parquet",
+     "column": "payment_type",
+     "change": "cast",
+     "from": "bigint",
+     "to": "int"
+    }
+   ],
+   "unused_columns": [
+    "Airport_fee",
+    "RatecodeID",
+    "cbd_congestion_fee",
+    "congestion_surcharge",
+    "extra",
+    "improvement_surcharge",
+    "mta_tax",
+    "request_source",
+    "store_and_fwd_flag",
+    "tip_amount",
+    "tolls_amount"
+   ]
+  },
+  {
+   "month": "2026-07",
+   "file": "yellow_tripdata_2026-07.parquet",
+   "drift": [
+    {
+     "file": "yellow_tripdata_2026-07.parquet",
+     "column": "passenger_count",
+     "change": "cast",
+     "from": "bigint",
+     "to": "int"
+    },
+    {
+     "file": "yellow_tripdata_2026-07.parquet",
+     "column": "payment_type",
+     "change": "cast",
+     "from": "bigint",
+     "to": "int"
+    }
+   ],
+   "unused_columns": [
+    "Airport_fee",
+    "RatecodeID",
+    "cbd_congestion_fee",
+    "congestion_surcharge",
+    "extra",
+    "improvement_surcharge",
+    "mta_tax",
+    "request_source",
+    "store_and_fwd_flag",
+    "tip_amount",
+    "tolls_amount"
+   ]
+  },
+  {
+   "month": "2026-08",
+   "file": "yellow_tripdata_2026-08.parquet",
+   "drift": [
+    {
+     "file": "yellow_tripdata_2026-08.parquet",
+     "column": "passenger_count",
+     "change": "cast",
+     "from": "bigint",
+     "to": "int"
+    },
+    {
+     "file": "yellow_tripdata_2026-08.parquet",
+     "column": "payment_type",
+     "change": "cast",
+     "from": "bigint",
+     "to": "int"
+    }
+   ],
+   "unused_columns": [
+    "Airport_fee",
+    "RatecodeID",
+    "cbd_congestion_fee",
+    "congestion_surcharge",
+    "extra",
+    "improvement_surcharge",
+    "mta_tax",
+    "request_source",
+    "store_and_fwd_flag",
+    "tip_amount",
+    "tolls_amount"
+   ]
+  },
+  {
+   "month": "2026-09",
+   "file": "yellow_tripdata_2026-09.parquet",
+   "drift": [
+    {
+     "file": "yellow_tripdata_2026-09.parquet",
+     "column": "passenger_count",
+     "change": "cast",
+     "from": "bigint",
+     "to": "int"
+    },
+    {
+     "file": "yellow_tripdata_2026-09.parquet",
+     "column": "payment_type",
+     "change": "cast",
+     "from": "bigint",
+     "to": "int"
+    }
+   ],
+   "unused_columns": [
+    "Airport_fee",
+    "RatecodeID",
+    "cbd_congestion_fee",
+    "congestion_surcharge",
+    "extra",
+    "improvement_surcharge",
+    "mta_tax",
+    "request_source",
+    "store_and_fwd_flag",
+    "tip_amount",
+    "tolls_amount"
+   ]
+  }
+ ],
+ "rows_by_month": {
+  "2025-10": 4428699,
+  "2025-11": 4181444,
+  "2025-12": 4305006,
+  "2026-01": 3724889,
+  "2026-02": 3399866,
+  "2026-03": 3952451,
+  "2026-04": 3831240,
+  "2026-05": 4090836,
+  "2026-06": 3837248,
+  "2026-07": 3530109,
+  "2026-08": 3336716,
+  "2026-09": 3876044
+ },
+ "seconds": 105.8
+}

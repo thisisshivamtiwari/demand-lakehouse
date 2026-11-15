@@ -23,6 +23,8 @@ def raw_month(month: str, drift: bool) -> pd.DataFrame:
         dict(pu=2, start=t, mins=15, dist=0.0, fare=8.0, total=9.0),  # zero distance
         dict(pu=1, start=t, mins=15, dist=3.0, fare=-12.0, total=-15.0),  # reversal
         dict(pu=264, start=t, mins=15, dist=3.0, fare=12.0, total=15.0),  # unknown zone
+        # flex-fare trip with a negative fare: a real pickup, kept and counted by a warn rule
+        dict(pu=2, start=t + dt.timedelta(days=2), mins=9, dist=1.4, fare=-4.0, total=-3.0, pt=0),
     ]
     df = pd.DataFrame(
         {
@@ -33,7 +35,7 @@ def raw_month(month: str, drift: bool) -> pd.DataFrame:
             "trip_distance": [r["dist"] for r in rows],
             "PULocationID": [r["pu"] for r in rows],
             "DOLocationID": 3,
-            "payment_type": 1,
+            "payment_type": [r.get("pt", 1) for r in rows],
             "fare_amount": [r["fare"] for r in rows],
             "total_amount": [r["total"] for r in rows],
         }
@@ -62,7 +64,7 @@ def test_bronze_records_drift_and_is_idempotent(spark, lake):
     root, raw, months = lake
     first = bronze.run(spark, raw, months, root / "bronze")
     again = bronze.run(spark, raw, months, root / "bronze")  # rerun must replace, not append
-    assert first["rows_by_month"] == again["rows_by_month"] == {"2026-01": 9, "2026-02": 9}
+    assert first["rows_by_month"] == again["rows_by_month"] == {"2026-01": 10, "2026-02": 10}
     drift = {(d["column"], d["change"]) for d in first["months"][1]["drift"]}
     assert ("passenger_count", "cast") in drift
     assert first["months"][1]["unused_columns"] == ["cbd_congestion_fee"]
@@ -71,11 +73,12 @@ def test_bronze_records_drift_and_is_idempotent(spark, lake):
 
 def test_silver_quarantines_one_row_per_rule(spark, lake):
     root, raw, months = lake
-    lenient = {k: (cond, 1.0) for k, (cond, _) in silver.default_rules().items()}
+    lenient = {k: (cond, None if limit is None else 1.0) for k, (cond, limit) in silver.default_rules().items()}
     rep = silver.run(spark, root / "bronze", root / "silver", root / "quarantine", rules=lenient)
-    assert rep["silver_rows"] == 6 and rep["quarantined_rows"] == 12
+    assert rep["silver_rows"] == 8 and rep["quarantined_rows"] == 12
+    assert rep["rules"]["flex_fare_amount_non_negative"]["failed"] == 2 and not rep["breaches"]
     q = spark.read.format("delta").load(str(root / "quarantine")).groupBy("failed_rule").count().collect()
-    assert {r["failed_rule"]: r["count"] for r in q} == {k: 2 for k in lenient}
+    assert {r["failed_rule"]: r["count"] for r in q} == {k: 2 for k, (_, limit) in lenient.items() if limit is not None}
 
 
 def test_silver_stops_the_run_above_threshold(spark, lake):
@@ -88,7 +91,7 @@ def test_gold_zero_fills_every_zone_day(spark, lake):
     root, raw, _ = lake
     stats = gold.run(spark, root / "silver", raw / "zones.csv", root / "gold")
     df = spark.read.format("delta").load(str(root / "gold")).toPandas()
-    assert stats["zones"] == 2 and stats["trips"] == 6
+    assert stats["zones"] == 2 and stats["trips"] == 8
     assert len(df) == 2 * stats["days"]  # every zone on every day, zeros included
     jan2 = df[(df["date"].astype(str) == "2026-01-02")].set_index("zone")["trips"]
     assert jan2.to_dict() == {1: 2, 2: 0}

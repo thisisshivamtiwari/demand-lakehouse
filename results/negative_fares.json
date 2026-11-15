@@ -1,0 +1,82 @@
+{
+ "months": [
+  "2025-10",
+  "2025-11"
+ ],
+ "rows_in_month": {
+  "2025-11": 4181444,
+  "2025-10": 4428699
+ },
+ "by_payment_type": [
+  {
+   "src_month": "2025-10",
+   "payment_type": 0,
+   "negative_rows": 253276,
+   "exact_positive_twin": 0,
+   "median_miles": 2.64
+  },
+  {
+   "src_month": "2025-10",
+   "payment_type": 1,
+   "negative_rows": 134,
+   "exact_positive_twin": 127,
+   "median_miles": 0.0
+  },
+  {
+   "src_month": "2025-10",
+   "payment_type": 2,
+   "negative_rows": 15630,
+   "exact_positive_twin": 14063,
+   "median_miles": 1.57
+  },
+  {
+   "src_month": "2025-10",
+   "payment_type": 3,
+   "negative_rows": 8296,
+   "exact_positive_twin": 7537,
+   "median_miles": 0.96
+  },
+  {
+   "src_month": "2025-10",
+   "payment_type": 4,
+   "negative_rows": 43971,
+   "exact_positive_twin": 39349,
+   "median_miles": 1.56
+  },
+  {
+   "src_month": "2025-11",
+   "payment_type": 0,
+   "negative_rows": 346979,
+   "exact_positive_twin": 0,
+   "median_miles": 2.83
+  },
+  {
+   "src_month": "2025-11",
+   "payment_type": 1,
+   "negative_rows": 269,
+   "exact_positive_twin": 258,
+   "median_miles": 0.0
+  },
+  {
+   "src_month": "2025-11",
+   "payment_type": 2,
+   "negative_rows": 10834,
+   "exact_positive_twin": 9696,
+   "median_miles": 1.56
+  },
+  {
+   "src_month": "2025-11",
+   "payment_type": 3,
+   "negative_rows": 5787,
+   "exact_positive_twin": 5246,
+   "median_miles": 0.94
+  },
+  {
+   "src_month": "2025-11",
+   "payment_type": 4,
+   "negative_rows": 31224,
+   "exact_positive_twin": 27918,
+   "median_miles": 1.53
+  }
+ ]
+}

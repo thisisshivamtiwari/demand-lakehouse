@@ -40,9 +40,11 @@ def horizon_table(bt: dict) -> str:
 
 
 def dq_table(dq: dict) -> str:
-    lines = ["| Rule | Rows failing | Rate | Run fails above |", "|---|---|---|---|"]
+    lines = ["| Rule | Rows failing | Rate | Worst month | Run fails if a month is above |", "|---|---|---|---|---|"]
     for name, r in dq["rules"].items():
-        lines.append(f"| {name} | {r['failed']:,} | {100 * r['rate']:.2f}% | {100 * r['max_rate']:.1f}% |")
+        worst = f"{100 * r['worst_month_rate']:.2f}% ({r['worst_month']})"
+        limit = "warn only (kept)" if r["max_rate"] is None else f"{100 * r['max_rate']:.1f}%"
+        lines.append(f"| {name} | {r['failed']:,} | {100 * r['rate']:.2f}% | {worst} | {limit} |")
     lines.append(
         f"\n{dq['rows']:,} bronze rows; {dq['silver_rows']:,} reached silver and {dq['quarantined_rows']:,} went to quarantine."
     )
@@ -50,16 +52,29 @@ def dq_table(dq: dict) -> str:
 
 
 def drift_lines(bz: dict) -> str:
-    seen: dict[str, set] = {}
-    for m in bz["months"]:
+    """Casts applied to every file, and columns that appear or vanish between monthly files."""
+    months = bz["months"]
+    out = []
+    casts = {(d["column"], d.get("from"), d.get("to")) for m in months for d in m["drift"] if d["change"] == "cast"}
+    for col, src, dst in sorted(casts):
+        n = sum(any(d["column"] == col and d["change"] == "cast" for d in m["drift"]) for m in months)
+        out.append(f"- `{col}` arrives as {src}, cast to {dst} ({n} of {len(months)} files)")
+    for m in months:
         for d in m["drift"]:
-            k = f"`{d['column']}` {d['change']} " + (
-                f"{d.get('from')} -> {d['to']}" if d["change"] == "cast" else f"(filled with null {d['to']})"
+            if d["change"] != "cast":
+                out.append(
+                    f"- {m['month']}: `{d['column']}` {d['change']} " + (f"(arrived as `{d['from']}`)" if d.get("from") else "")
+                )
+    for prev, cur in zip(months, months[1:], strict=False):
+        new = sorted(set(cur["unused_columns"]) - set(prev["unused_columns"]))
+        gone = sorted(set(prev["unused_columns"]) - set(cur["unused_columns"]))
+        if new:
+            out.append(
+                f"- {cur['month']}: new column(s) " + ", ".join(f"`{c}`" for c in new) + " (kept in the raw file, not used)"
             )
-            seen.setdefault(k, set()).add(m["month"])
-    if not seen:
-        return "No schema drift across the 12 files."
-    return "\n".join(f"- {k}: {len(v)} of {len(bz['months'])} files" for k, v in sorted(seen.items()))
+        if gone:
+            out.append(f"- {cur['month']}: column(s) dropped " + ", ".join(f"`{c}`" for c in gone))
+    return "\n".join(out) or "No schema drift across the files."
 
 
 def run_table(run: dict, stage_s: dict) -> str:

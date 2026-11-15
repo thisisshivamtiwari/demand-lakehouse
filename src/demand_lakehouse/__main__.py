@@ -1,4 +1,4 @@
-"""Command line: download | run [--only task ...] | ci | scaling | report."""
+"""Command line: download | run [--only task ...] | ci | scaling | report | investigate."""
 
 import argparse
 import json
@@ -39,13 +39,20 @@ def actions(spark) -> dict:
 
         return go
 
+    def silver_run():
+        try:
+            return silver.run(spark, C.BRONZE, C.SILVER, C.QUARANTINE)
+        except silver.ExpectationFailed as e:
+            save("dq_failed", e.report)  # keep the evidence of the stopped run
+            raise
+
     def backtest():
         g = spark.read.format("delta").load(str(C.GOLD)).withColumn("date", F.col("date").cast("date"))
         return forecast.backtest(spark, g)
 
     return {
         "bronze": timed("bronze", lambda: bronze.run(spark, C.RAW, C.MONTHS, C.BRONZE)),
-        "silver": timed("dq", lambda: silver.run(spark, C.BRONZE, C.SILVER, C.QUARANTINE)),
+        "silver": timed("dq", silver_run),
         "gold": timed("gold", lambda: gold.run(spark, C.SILVER, C.RAW / "taxi_zone_lookup.csv", C.GOLD, C.GOLD_SNAPSHOT)),
         "backtest": timed("backtest", backtest),
         "report": lambda: report.write(C.RESULTS, C.ROOT / "README.md") or {},
@@ -90,6 +97,7 @@ def main(argv=None) -> int:
     s = sub.add_parser("scaling")
     s.add_argument("--cores", nargs="*", type=int, default=[1, 2, 4, 8])
     sub.add_parser("report")
+    sub.add_parser("investigate", help="negative fares in Oct-Nov 2025: reversals vs flex-fare rows")
     a = p.parse_args(argv)
     if a.cmd == "download":
         download()
@@ -100,6 +108,12 @@ def main(argv=None) -> int:
         from . import report
 
         report.write(C.RESULTS, C.ROOT / "README.md")
+        return 0
+    if a.cmd == "investigate":
+        from .investigate import negative_fares
+        from .spark import get_spark
+
+        save("negative_fares", negative_fares(get_spark(), C.BRONZE, ["2025-10", "2025-11"]))
         return 0
     if a.cmd == "scaling":
         from . import scaling
