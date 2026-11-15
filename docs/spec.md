@@ -23,5 +23,5 @@ taxi-zone lookup. Demand = pickups per zone per day. 263 zones, 6 boroughs, 1 ci
 **Measures.** WAPE and MASE by level against seasonal-naive; data-quality drop rates by rule; pipeline runtime by
 stage and by core count.
 
-**Gate (CI).** Lint, tests (pipeline on a small real-data fixture), and a replay of the backtest from the committed gold
+**Gate (CI).** Lint, tests (pipeline on a small hand-made fixture with the real files' problems), and a replay of the backtest from the committed gold
 snapshot that must reproduce results/backtest.json and must beat seasonal-naive at the zone level.
